@@ -16,7 +16,7 @@ public class AtmMachine{
     private static void transaction(){
         // here is where most of work is
  
-        int choice; 
+        int choice;  
  
         System.out.println("Please select an option"); 
         System.out.println("1. Withdraw");
