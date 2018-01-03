@@ -1,6 +1,8 @@
 import java.util.Scanner;
- 
-public class AtmMachine{
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+public class atm{
  
     private static Scanner in; 
     private static float balance = 0; // initial balance to 0 for everyone
@@ -8,21 +10,20 @@ public class AtmMachine{
  
     public static void main(String args[]){
         in = new Scanner(System.in);
- 
+        
+        ResourceBundle bundle = chooseLanguage();
+        System.out.println(bundle.getString("option")); 
+        System.out.println(bundle.getString("withdraw"));
+        System.out.println(bundle.getString("deposit"));
+        System.out.println(bundle.getString("balance"));
         // call our transaction method here 
-        transaction();
+        transaction(bundle);
     }
  
-    private static void transaction(){
+    private static void transaction(ResourceBundle bundle2){
         // here is where most of work is
- 
-        int choice;  
- 
-        System.out.println("Please select an option"); 
-        System.out.println("1. Withdraw");
-        System.out.println("2. Deposit");
-        System.out.println("3. Balance");
- 
+        int choice; 
+
         choice = in.nextInt();
  
         switch(choice){
@@ -78,5 +79,40 @@ public class AtmMachine{
             System.out.println("Invalid choice\n\n");
             anotherTransaction();
         }
+    }
+    
+    private static ResourceBundle chooseLanguage(){
+    	
+    	int pick;
+    	System.out.println("Choose language: 1. Bosanski 2. English 3. German \n\n");
+    	Scanner sc = new Scanner(System.in);
+        pick = sc.nextInt();
+        String lang;
+        String country;
+    	switch(pick){
+    	case 1:
+    		 lang = "bs";
+    		 country="BS";
+    		break;
+    	case 2:
+    		 lang = "en";
+    		 country="US";
+    		break;
+    	case 3:
+    		 lang = "ge";
+    		 country="GE";
+    		break;
+    	default:
+    		System.out.println("Invalid, default language choosen \n\n");	
+    		 lang = "bs";
+    		 country="BS";
+    	}
+    		
+		Locale l = new Locale(lang,country);
+	    ResourceBundle r = ResourceBundle.getBundle("languages/config",l);
+		
+		String str = r.getString("wish");
+		System.out.println(str);
+		return r;
     }
 }
