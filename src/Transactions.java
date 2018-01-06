@@ -3,20 +3,23 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Transactions {
-	private static Scanner in; 
-    private static float balance; // initial balance to 0 for everyone
-    private static int anotherTransaction;
-    private static ResourceBundle r;
+	private  Scanner in; 
+    private  double balance; // initial balance to 0 for everyone
+    private  int anotherTransaction;
+    private  ResourceBundle r;
+    private Database db;
 
  
-    public Transactions(){
+    public Transactions(int pin, int accno){
         in = new Scanner(System.in);
-        balance = 0;
         r = chooseLanguage();
+        db = new Database(pin,accno);
+        balance = db.getBalance();
+		System.out.println(balance);
         transaction();
     }
  
-    private static void transaction(){
+    private  void transaction(){
         // here is where most of work is
  
         int choice; 
@@ -34,7 +37,7 @@ public class Transactions {
                 System.out.println(r.getString("amount")); 
                 amount = in.nextFloat();
                 if(amount > balance || amount == 0){
-                    System.out.println(r.getString("amount")+"/n/n"); 
+                    System.out.println(r.getString("insufficient")); 
                     anotherTransaction(); // ask if they want another transaction
                 } else {
                     // they have some cash
@@ -70,22 +73,23 @@ public class Transactions {
  
     }
  
-    private static void anotherTransaction(){
+    private  void anotherTransaction(){
         System.out.println(r.getString("anothertransaction"));
         anotherTransaction = in.nextInt();
         if(anotherTransaction == 1){
             transaction(); // call transaction method
         } else if(anotherTransaction == 2){
             System.out.println(r.getString("thanks"));
+            db.updateBalance(balance);
         } else {
             System.out.println(r.getString("invalid"));
             anotherTransaction();
         }
     }
     
-    private static ResourceBundle chooseLanguage(){
+    private ResourceBundle chooseLanguage(){
     	int pick;
-    	System.out.println("Choose language:\n1. Bosanski \n2. English \n3. German \n");
+    	System.out.println("Choose language:\n\t1. Bosanski \n\t2. English \n\t3. German \n");
     	Scanner sc = new Scanner(System.in);
         pick = sc.nextInt();
         String lang;
@@ -113,9 +117,6 @@ public class Transactions {
     		
 		Locale l = new Locale(lang,country);
 		ResourceBundle bundle = ResourceBundle.getBundle("languages/config",l);
-		
-		//String str = bundle.getString("wish");
-		//System.out.println(str);
 		return bundle;
     }
 }
