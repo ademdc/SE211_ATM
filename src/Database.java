@@ -14,7 +14,6 @@ public class Database {
 			myStmt = myConn.createStatement();
 			String sql = "select * from users";
 			myRs = myStmt.executeQuery(sql);
-			
 			while (myRs.next()) {
 				int userpin = Integer.parseInt(myRs.getString("pin"));
 				double useraccno = Double.parseDouble(myRs.getString("cardno"));
@@ -22,9 +21,17 @@ public class Database {
 				if(pin==userpin && cardno==useraccno){
 				balance = Double.parseDouble(myRs.getString("balance"));
 				id = Integer.parseInt(myRs.getString("id"));
-				}
+				
+				}	
 			}
-			}catch(Exception exc){
+			if(balance==0.0){
+				checkDataIntegrity();
+			}
+			}catch(EntryNotFoundException e){
+				System.out.println(e.getMessage());
+				System.exit(0);
+			}
+		    catch(Exception exc){
 				exc.printStackTrace();
 			}
 	
@@ -43,6 +50,10 @@ public class Database {
 			}catch(Exception exc){
 				exc.printStackTrace();
 			}
+	}
+	
+	public void checkDataIntegrity() throws EntryNotFoundException{
+		throw new EntryNotFoundException();
 	}
 	
 

@@ -15,7 +15,6 @@ public class Transactions {
         r = chooseLanguage();
         db = new Database(pin,accno);
         balance = db.getBalance();
-		System.out.println(balance);
         transaction();
     }
  
